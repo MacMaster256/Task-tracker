@@ -77,7 +77,10 @@ public class Task extends Table {
 		if (this.status.get() == TaskFinished) { 
 			this.factFinishedAt = date.now();
 			update(recordId);	
-		}
+		} else {
+			this.factFinishedAt = date.Min;
+			update(recordId);	
+		} 
 	}
 	
 	// При обновлении записи, в случае завершения задачи,
