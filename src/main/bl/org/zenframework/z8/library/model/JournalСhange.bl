@@ -1,0 +1,22 @@
+import org.zenframework.z8.base.table.Table;
+import org.zenframework.z8.base.table.value.Link;
+import org.zenframework.z8.base.table.value.DateField;
+
+import org.zenframework.z8.library.view.Users2;
+
+[generatable]
+[name "JournalСhange"]
+public class JournalСhange extends Table {
+	
+	public Task task;
+	[name "Task"] public Link taskId = task;
+	
+	[name "DateChanges"]
+	[displayName "Дата изменения"]
+	public DateField dateChanges;
+	dateChanges.defaultValue = date.now();
+	
+	public Users2 userChanged;
+	[name "userChanged"] public Link userExecutedId = userChanged;
+	
+}

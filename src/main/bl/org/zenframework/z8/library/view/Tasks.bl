@@ -1,0 +1,22 @@
+import org.zenframework.z8.library.model.Task;
+
+[entry]
+[displayName "Задачи"]
+public class Tasks extends Task {
+	
+	[displayName "Наименование"] name;
+	
+	[displayName "Проект"] project.name;
+	
+	[displayName "Описание Задачи"] description;
+	description.colSpan = 4;
+
+	// При установки этих атрибутов возникает ошибка
+	//[displayName "Создатель задачи"] userCreated.name;
+	//[displayName "Исполнитель задачи"] userExecuted.name;
+
+	names = { name };
+	controls = { taskId, name, project.name, userCreated.name, userExecuted.name, type.name, statusStr, complexity, finishedAt, factFinishedAt, description };
+	columns = { taskId, name, project.name, userCreated.name, userExecuted.name, type.name, statusStr, complexity, finishedAt, factFinishedAt, description };
+	
+}

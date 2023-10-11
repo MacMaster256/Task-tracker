@@ -1,0 +1,39 @@
+import org.zenframework.z8.base.form.Listbox;
+import org.zenframework.z8.base.form.Fieldset;
+import org.zenframework.z8.base.table.system.Users;
+
+import org.zenframework.z8.library.view.Tasks;
+
+[entry]
+[generatable]
+public class Users2 extends Users {
+
+	[displayName "Имя Пользователя"] name;
+	
+	[displayName "Идентификатор Пользователя"] shortName;
+	
+	[displayName "Электронная почта"] email;
+
+	public Tasks tasks;
+	tasks.shortName.editable = true;
+	tasks.name.editable = true;
+	tasks.finishedAt.editable = true;
+
+	[displayName "Задачи Пользователя"]
+	public Listbox taskList;
+	taskList.query = tasks;
+	taskList.link = tasks.userExecutedId;
+	taskList.columns = { tasks.taskId, tasks.taskProject, tasks.finishedAt, tasks.factFinishedAt};
+	taskList.colSpan = 3;
+	taskList.flex = 1;
+	
+	[displayName "Пользователь"]
+	public Fieldset userFields;
+	userFields.controls = { name, shortName };
+	userFields.colCount = 1;
+	
+	names = { name };
+	controls = {userFields , taskList};
+	columns = { name, shortName, firstName, lastName, phone,  email};
+
+}

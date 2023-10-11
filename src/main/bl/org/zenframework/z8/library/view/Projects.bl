@@ -1,0 +1,29 @@
+import org.zenframework.z8.base.form.Listbox;
+
+import org.zenframework.z8.library.model.Project;
+import org.zenframework.z8.library.view.Tasks;
+
+[entry]
+[displayName "Проекты"]
+public class Projects extends Project {
+	
+	[displayName "Наименование"] name;
+	
+	public Tasks tasks;
+	tasks.shortName.editable = true;
+	tasks.name.editable = true;
+	tasks.finishedAt.editable = true;
+
+	[displayName "Задачи Проекта"]
+	public Listbox taskList;
+	taskList.query = tasks;
+	taskList.link = tasks.projectId;
+	taskList.columns = { tasks.taskId, tasks.name, tasks.userExecuted.name, tasks.finishedAt, tasks.factFinishedAt};
+	taskList.colSpan = 4;
+	taskList.flex = 1;
+	
+	
+	names = { name };
+	controls = {  projectId, name, taskList};
+	columns = {  projectId, name};	
+}

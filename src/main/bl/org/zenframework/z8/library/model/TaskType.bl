@@ -1,0 +1,19 @@
+import org.zenframework.z8.base.table.Table;
+
+
+[generatable]
+[name "Task type"]
+[displayName "Тип Задачи"] 
+public class TaskType extends Table {
+	records {
+		[name "Новая задача"]
+		newTask = '870EF359-CC4D-4EC2-9821-F52C0B89F2DC';
+		
+		[name "Задача в работе"]
+		workingTask = 'E2477EDF-0828-4417-8375-8D369520826A';
+		
+		[name "Задача исполнена"]
+		readyTask = '7948636D-7514-482E-9A87-8AFF9BABE7A3';
+	}
+
+}
