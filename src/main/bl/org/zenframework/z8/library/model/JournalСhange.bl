@@ -1,22 +1,24 @@
 import org.zenframework.z8.base.table.Table;
-import org.zenframework.z8.base.table.value.Link;
 import org.zenframework.z8.base.table.value.DateField;
-
-import org.zenframework.z8.library.view.Users2;
+import org.zenframework.z8.base.table.value.StringField;
 
 [generatable]
 [name "JournalСhange"]
 public class JournalСhange extends Table {
-	
-	public Task task;
-	[name "Task"] public Link taskId = task;
-	
+		
 	[name "DateChanges"]
 	[displayName "Дата изменения"]
 	public DateField dateChanges;
-	dateChanges.defaultValue = date.now();
 	
-	public Users2 userChanged;
-	[name "userChanged"] public Link userExecutedId = userChanged;
+	[name "UserChanged"]
+	[displayName "Внес изменения в задачу"]
+	public StringField userChanged;	
 	
+	[name "AttributeChanged"]
+	[displayName "Измененный атрибут"]
+	public StringField attributeChanged;
+	
+	[name "NewAttributeValue"]
+	[displayName "Новое значение атрибута"]
+	public StringField newAttributeValue;	
 }

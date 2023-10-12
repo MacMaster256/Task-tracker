@@ -1,0 +1,14 @@
+import org.zenframework.z8.library.model.JournalСhange;
+
+[entry]
+[displayName "Журнал изменений задачи"]
+[presentation "table"]
+[request true]
+public class JournalChangeView extends JournalСhange {
+	
+	[displayName "Наименование задачи"] name;
+	
+	names = { name };
+	columns = { name, dateChanges, userChanged, attributeChanged, newAttributeValue };
+	controls = { name, dateChanges, userChanged, attributeChanged, newAttributeValue };
+}

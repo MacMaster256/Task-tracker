@@ -1,39 +1,43 @@
-import org.zenframework.z8.base.form.Listbox;
 import org.zenframework.z8.base.form.Fieldset;
-import org.zenframework.z8.base.table.system.Users;
+import org.zenframework.z8.base.form.Listbox;
+import org.zenframework.z8.base.form.Form;
 
-import org.zenframework.z8.library.view.Tasks;
+import org.zenframework.z8.library.model.User;
+
 
 [entry]
-[generatable]
-public class Users2 extends Users {
+[request true]
+public class Users2 extends User {
 
-	[displayName "Имя Пользователя"] name;
-	
-	[displayName "Идентификатор Пользователя"] shortName;
+	[displayName "Имя пользователя"] name;
 	
 	[displayName "Электронная почта"] email;
 
-	public Tasks tasks;
-	tasks.shortName.editable = true;
-	tasks.name.editable = true;
-	tasks.finishedAt.editable = true;
-
-	[displayName "Задачи Пользователя"]
+	[displayName "Задачи пользователя"]
 	public Listbox taskList;
-	taskList.query = tasks;
-	taskList.link = tasks.userExecutedId;
-	taskList.columns = { tasks.taskId, tasks.taskProject, tasks.finishedAt, tasks.factFinishedAt};
+	taskList.query = task;
+	taskList.link = task.userExecutedId;
+	taskList.columns = { task.taskId, task.taskProject, task.finishedAt, task.factFinishedAt};
 	taskList.colSpan = 3;
 	taskList.flex = 1;
+	taskList.dependencies = { taskForm };
 	
 	[displayName "Пользователь"]
 	public Fieldset userFields;
-	userFields.controls = { name, shortName };
-	userFields.colCount = 1;
+	userFields.controls = { name, userId, firstName, lastName };
+	userFields.colCount = 4;
+	userFields.colSpan = 4;
+	
+	[displayName "Описание задачи"] task.description;
+	
+	task.description.flex = 1;
+	public Form taskForm;
+	taskForm.controls = { task.description };
+	taskForm.flex = 1;
+	taskForm.colCount = 1;
+	taskForm.colSpan = 1;
 	
 	names = { name };
-	controls = {userFields , taskList};
-	columns = { name, shortName, firstName, lastName, phone,  email};
-
+	controls = {userFields , taskList, taskForm};
+	columns = { name, userId, firstName, lastName, phone,  email};
 }

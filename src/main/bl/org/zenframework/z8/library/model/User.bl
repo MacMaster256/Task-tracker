@@ -1,0 +1,16 @@
+import org.zenframework.z8.base.table.system.Users;
+import org.zenframework.z8.library.model.Task;
+import org.zenframework.z8.base.table.value.StringField;
+import org.zenframework.z8.lang.Math;
+
+[generatable]
+[name "User"]
+public class User extends Users {
+
+	[name "ID"]
+	[displayName "Идентификатор пользователя"]
+	public StringField userId;
+	userId.defaultValue = (Math.random()*10000).round().toString();
+	
+	public Task task;
+}

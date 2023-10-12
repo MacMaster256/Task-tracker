@@ -1,15 +1,16 @@
 import org.zenframework.z8.base.table.Table;
-import org.zenframework.z8.base.table.value.Link;
-import org.zenframework.z8.base.table.value.Field;
-import org.zenframework.z8.base.table.value.IntField;
 import org.zenframework.z8.base.table.value.DateField;
-import org.zenframework.z8.base.table.value.StringField;
-import org.zenframework.z8.base.table.value.StringExpression;
+import org.zenframework.z8.base.table.value.Field;
 import org.zenframework.z8.base.table.value.IntExpression;
+import org.zenframework.z8.base.table.value.IntField;
+import org.zenframework.z8.base.table.value.Link;
+import org.zenframework.z8.base.table.value.StringExpression;
+import org.zenframework.z8.base.table.value.BoolExpression;
+import org.zenframework.z8.base.table.value.StringField;
 import org.zenframework.z8.lang.Math;
 
-import org.zenframework.z8.library.view.Users2;
-
+import org.zenframework.z8.library.model.User;
+import org.zenframework.z8.library.model.JournalСhange;
 
 [generatable]
 [name "Task"]
@@ -28,17 +29,13 @@ public class Task extends Table {
 	public Project project;
 	[name "Project"] public Link projectId = project;
 	
-	// Также тип статуса в задаче, реализован в виде выпадающего списка, 
-	// чтобы пользователь мог выбирать
 	public TaskType type;
 	[name "Type"] public Link typeId = type;
 	
-	[displayName "Создатель задачи"]
-	public Users2 userCreated;
+	public User userCreated;
 	[name "UserCreated"] public Link userCreatedId = userCreated;
 	
-	[displayName "Исполнитель задачи"]
-	public Users2 userExecuted;
+	public User userExecuted;
 	[name "UserExecuted"] public Link userExecutedId = userExecuted;
 		
 	[name "Complexity"]
@@ -52,24 +49,21 @@ public class Task extends Table {
 	[name "FactDate"]
 	[displayName "Дата фактического выполнения"]
 	public DateField factFinishedAt;
+		
+	// Работаем со статусом в зависимости от поля type и пользователь мог сам выбирать
+	public IntExpression status = (type.name == "Новая задача").IIF(NewTask, (type.name == "Задача в работе").IIF(TaskInWork, TaskFinished));
 	
-	
-	// Работаем со статусом в зависимости от дат, в дальнейшем надо от этого
-	// отказаться, так как использовать поле type и пользователь мог сам выбирать
-	public IntExpression status = (finishedAt == date.Min && factFinishedAt == date.Min).IIF(
-			NewTask, (finishedAt != date.Min && factFinishedAt == date.Min).IIF(TaskInWork, TaskFinished));
-	
-	
-	//Здесь поле статус заполняется относительно датам
-	[displayName "Статус"]
-	public StringExpression statusStr = (status == NewTask).IIF("Новая задача", (status == TaskInWork).IIF("В работе", "Завершена"));
+	//Здесь строка статуса для отладки
+	//[displayName "Статус"]
+	//public StringExpression statusStr = (status == NewTask).IIF("Новая задача", (status == TaskInWork).IIF("В работе", "Завершена"));
 		
 	[displayName "Наименование задачи (Проект)"]
 	public StringExpression taskProject = name + " (" + project.name + ")";
 	
+	[displayName "Завершена"]
+	public BoolExpression finished = (status == TaskFinished).IIF(true, false);
 	
-	// В этом метода нужно, чтобы вместо status работа велась с полем type,
-	// то есть когда пользователь выбирает завершить задачу мы обновляем фактическую дату
+	// В этом методе, когда пользователь выбирает завершить задачу мы обновляем фактическую дату
 	public void finishedTask(guid recordId) {
 		if (!readRecord(recordId, Field[] { this.status }))
 			throw "Запись '" + recordId + "' не существует";
@@ -82,12 +76,20 @@ public class Task extends Table {
 			update(recordId);	
 		} 
 	}
+		
+	// Метод для логирования изменений в таблице по задачам
+	public void logTask(guid recordId) {
+		JournalСhange journalСhange;
+		journalСhange.name = name;
+		journalСhange.dateChanges = date.now();
+		journalСhange.userChanged = name();
+	}
 	
 	// При обновлении записи, в случае завершения задачи,
 	// проставляем фактическую дату
 	virtual protected void onUpdateAction(guid recordId) {
 		super.onUpdateAction(recordId);
 		finishedTask(recordId);
+		logTask(recordId);
 	}
-
 }

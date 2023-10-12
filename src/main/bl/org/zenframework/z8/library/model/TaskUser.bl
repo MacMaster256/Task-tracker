@@ -1,0 +1,13 @@
+import org.zenframework.z8.base.table.system.Users;
+import org.zenframework.z8.base.table.value.BoolField;
+
+[generatable]
+public class TaskUser extends Users {
+	[name "Can delete"]
+	public BoolField canDelete;
+	
+	[name "Can change"]
+	public BoolField canChange;
+	
+	
+}

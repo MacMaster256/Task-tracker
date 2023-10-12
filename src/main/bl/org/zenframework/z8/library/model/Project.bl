@@ -1,6 +1,7 @@
 import org.zenframework.z8.base.table.Table;
 import org.zenframework.z8.base.table.value.StringField;
 import org.zenframework.z8.lang.Math;
+import org.zenframework.z8.library.model.Task;
 
 [generatable]
 [name "Projects"]
@@ -10,5 +11,7 @@ public class Project extends Table {
 	[displayName "Идентификатор Проекта"]
 	public StringField projectId;
 	projectId.defaultValue = (Math.random()*10000).round().toString();
+	
+	public Task task;
 	
 }
