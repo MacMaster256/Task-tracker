@@ -53,10 +53,6 @@ public class Task extends Table {
 	// Работаем со статусом в зависимости от поля type и пользователь мог сам выбирать
 	public IntExpression status = (type.name == "Новая задача").IIF(NewTask, (type.name == "Задача в работе").IIF(TaskInWork, TaskFinished));
 	
-	//Здесь строка статуса для отладки
-	//[displayName "Статус"]
-	//public StringExpression statusStr = (status == NewTask).IIF("Новая задача", (status == TaskInWork).IIF("В работе", "Завершена"));
-		
 	[displayName "Наименование задачи (Проект)"]
 	public StringExpression taskProject = name + " (" + project.name + ")";
 	
@@ -65,7 +61,7 @@ public class Task extends Table {
 	
 	// В этом методе, когда пользователь выбирает завершить задачу мы обновляем фактическую дату
 	public void finishedTask(guid recordId) {
-		if (!readRecord(recordId, Field[] { this.status }))
+		if (!readRecord(recordId, Field[] { this.status, this.factFinishedAt }))
 			throw "Запись '" + recordId + "' не существует";
 		
 		if (this.status.get() == TaskFinished) { 
@@ -79,10 +75,15 @@ public class Task extends Table {
 		
 	// Метод для логирования изменений в таблице по задачам
 	public void logTask(guid recordId) {
+		if (!readRecord(recordId, Field[] { this.taskId, this.name }))
+			throw "Запись '" + recordId + "' не существует";
+		
 		JournalСhange journalСhange;
-		journalСhange.name = name;
+		// Через класс query создать запись в таблице
+		// create()
+		journalСhange.name = this.name;
 		journalСhange.dateChanges = date.now();
-		journalСhange.userChanged = name();
+		journalСhange.userChanged = user().login;
 	}
 	
 	// При обновлении записи, в случае завершения задачи,
@@ -92,4 +93,5 @@ public class Task extends Table {
 		finishedTask(recordId);
 		logTask(recordId);
 	}
+	
 }
